@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CampusPulse AI</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f3f6f6;--card:#fff;--bd:#dbe3e3;--tx:#12201f;--mu:#5d6f6d;--ac:#0f766e;--c:#c0262d;--h:#c2410c;--m:#a16207;--l:#15803d}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1514;--card:#122120;--bd:#213634;--tx:#e6f1ef;--mu:#93aaa7;--ac:#2dd4bf;--c:#f87171;--h:#fb923c;--m:#fbbf24;--l:#4ade80}}
+:root[data-theme=dark]{--bg:#0b1514;--card:#122120;--bd:#213634;--tx:#e6f1ef;--mu:#93aaa7;--ac:#2dd4bf;--c:#f87171;--h:#fb923c;--m:#fbbf24;--l:#4ade80}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1180px;margin:auto;padding:16px}
+h1{margin:0;font-size:24px;letter-spacing:-.02em}h3{margin:0 0 10px;font-size:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.mu{color:var(--mu);font-size:13px}
+.g{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.g{grid-template-columns:350px 1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.k{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.kv{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.bb{background:var(--bd);border-radius:6px;margin-top:6px;overflow:hidden}
+.bb div{padding:3px 8px;font-size:12px;background:var(--mu);color:var(--card);white-space:nowrap;transition:width .5s}.bb div.a{background:var(--ac)}
+textarea,select,input[type=range]{font:inherit;color:var(--tx)}
+textarea{width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px;resize:vertical}
+select{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:4px 8px}
+.btn{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:7px 12px;cursor:pointer}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:var(--bg);font-weight:600;margin-top:10px}
+.lnk{font:inherit;background:none;border:0;color:var(--ac);cursor:pointer;text-decoration:underline}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.tag{font-size:12px;border:1px solid var(--bd);border-radius:99px;padding:1px 8px;margin:6px 6px 0 0;display:inline-block}
+.b{color:var(--pc);background:color-mix(in srgb,var(--pc) 14%,transparent);border:1px solid color-mix(in srgb,var(--pc) 35%,transparent);padding:1px 9px;border-radius:99px;font-size:12px;font-weight:700}
+.p-Critical{--pc:var(--c)}.p-High{--pc:var(--h)}.p-Medium{--pc:var(--m)}.p-Low{--pc:var(--l)}
+.dots i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ac);margin-right:2px}
+.flash{animation:f 1.2s}@keyframes f{from{box-shadow:0 0 0 4px var(--ac)}}
+.flash .dots i{animation:d 1s}@keyframes d{from{transform:translateX(30px) scale(.3);opacity:0}}
+@media(prefers-reduced-motion:reduce){.flash,.flash .dots i{animation:none}}
+.pl{display:grid;gap:6px}.n{opacity:.4;border:1px solid var(--bd);border-radius:8px;padding:6px 10px;transition:opacity .25s}
+.n.on{opacity:1;border-color:var(--ac)}
+.hn{margin-top:8px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--ac) 12%,transparent);font-size:14px}
+.fr{display:grid;grid-template-columns:130px 1fr 28px;gap:8px;align-items:center;font-size:13px}
+.tr{background:var(--bd);height:6px;border-radius:4px}.tr div{height:6px;border-radius:4px;background:var(--pc,var(--ac))}
+.cm{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--bd);padding:5px 0;font-size:13px}
+.f{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+</style></head><body>
+<div class="w">
+<header><div><h1>CampusPulse AI</h1><div class="mu">Many reports become one prioritized issue</div></div><button class="btn" id="th">Toggle theme</button></header>
+<div class="k" id="kpi"></div>
+<div class="g">
+<div style="display:grid;gap:16px;align-content:start">
+<div class="card"><h3>Report a problem</h3>
+<textarea id="txt" rows="3" placeholder="e.g. Water leaking near B block stairs"></textarea>
+<div id="chips"></div><div id="hint"></div>
+<button class="btn pri" id="sub">Submit report</button></div>
+<div class="card"><h3>AI pipeline, live</h3><div class="pl" id="pl"></div>
+<div class="row" style="margin-top:12px"><button class="btn" id="sim">Start simulation</button><label class="mu">Speed <input id="sp" type="range" min="400" max="3000" value="1900"></label></div></div>
+</div>
+<div><div class="f"><select id="fp" aria-label="Priority"><option value="">All priorities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+<select id="fs" aria-label="Status"><option value="">All statuses</option><option>New</option><option>Assigned</option><option>In Progress</option><option>Resolved</option></select></div>
+<div id="list"></div></div>
+</div></div>
+<script>
+const $=s=>document.querySelector(s);
+const st=w=>w.length>3?w.replace(/(ing|es|s)$/,""):w;
+const STOP=new Set("the a an in on at of is are not no to and near from for it my our this that very there was be by with has have block since morning".split(" "));
+const C=Object.fromEntries(Object.entries({Electrical:"fan light ac socket switch wire power fuse tube",Plumbing:"water leak tap pipe flush drain",Sanitation:"dustbin garbage trash smell toilet dirty waste",'IT / AV':"projector wifi internet computer screen mic speaker network",Furniture:"bench chair desk table board door window"}).map(([k,v])=>[k,v.split(" ")]));
+const TEAM={Electrical:"Electrical Maintenance",Plumbing:"Plumbing and Civil",Sanitation:"Housekeeping","IT / AV":"IT Support",Furniture:"Carpentry",Safety:"Safety Officer",Other:"Admin Office"};
+const LOC={lab:1,hostel:1,library:1,"seminar hall":1,auditorium:1,classroom:.6};
+const W={safety:.3,reports:.25,time:.15,recur:.15,location:.15};
+const LBL={safety:"Safety risk",reports:"Report count",time:"Time unresolved",recur:"Recurrence",location:"Location importance"};
+const ICON={Critical:"⚠",High:"▲",Medium:"◆",Low:"●"},RANK={Critical:3,High:2,Medium:1,Low:0};
+const ST=["New","Assigned","In Progress","Resolved"],NODES=["Intake","Dedup","RAG","Priority","Summary"];
+const PAST=[["Plumbing","B"],["IT / AV","A"]];
+const TPL=["Water leaking in B block stairs","Fan not working in C block classroom","Dustbin overflowing near canteen","Projector broken in A block seminar hall","Sparks from socket in lab D block","No wifi in hostel","AC not cooling in library","Tap leaking in A block washroom","Lights not working in E block corridor","Toilet smells bad in B block washroom","Broken bench in C block classroom","Smoke from switchboard in E block lab"];
+let issues=[],seq=0,flash=null,run=0,iv=null,fp="",fs="";const OPEN=new Set();
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const locStr=x=>(x.block?"Block "+x.block:"Campus")+(x.place?" · "+x.place:"");
+const ago=t=>{const h=(Date.now()-t)/36e5;return h<1?Math.max(1,(h*60)|0)+"m ago":h<48?(h|0)+"h ago":((h/24)|0)+"d ago"};
+const P=x=>/^class/.test(x)?"classroom":/^stair/.test(x)?"stairs":x;
+function analyze(t){
+ const b=t.match(/\b([a-f])\s*-?\s*block\b|\bblock\s*([a-f])\b/i),pm=t.match(/\b(lab|hostel|library|canteen|classroom|class|stair\w*|corridor|washroom|seminar hall|auditorium)\b/i);
+ const block=b?(b[1]||b[2]).toUpperCase():null,place=pm?P(pm[1].toLowerCase()):null;
+ const w=t.toLowerCase().split(/[^a-z0-9]+/).map(st).filter(x=>x.length>1&&!STOP.has(x)&&x!=="clas");
+ if(place)w.push(st(place));const toks=new Set(w);
+ let cat="Other";
+ if(/spark|shock|fire|smoke|exposed|short circuit/i.test(t))cat="Safety";
+ else{let bs=0;for(const k in C){const n=C[k].filter(x=>[...toks].some(y=>y===x||(x.length>3&&y.startsWith(x)))).length;if(n>bs){bs=n;cat=k}}}
+ return{block,place,toks,cat}}
+function match(c){let best=null,bs=0;
+ for(const is of issues){if(is.cat!==c.cat)continue;
+  let cov=0;c.toks.forEach(x=>is.toks.has(x)&&cov++);
+  let s=(c.toks.size?cov/c.toks.size:0)*.6+(c.block&&c.block===is.block?.3:0)+(c.place&&c.place===is.place?.1:0);
+  if(c.block&&is.block&&c.block!==is.block)s-=.5;
+  if(s>bs){bs=s;best=is}}
+ return bs>=.38?{is:best,s:Math.min(bs,.99)}:null}
+function score(is){
+ const t=is.complaints.map(c=>c.text).join(" ").toLowerCase(),strong=/spark|shock|fire|smoke|exposed|short circuit/.test(t);
+ const f={safety:strong?1:/leak|flood|slip|crack/.test(t)?.4:0,reports:Math.min(is.complaints.length/10,1),time:Math.min((Date.now()-is.first)/36e5/48,1),recur:is.recur?1:0,location:LOC[is.place]??.3};
+ let s=0;for(const k in W)s+=f[k]*W[k];s=Math.round(s*100);
+ return{f,s,strong,p:strong||s>=60?"Critical":s>=42?"High":s>=25?"Medium":"Low"}}
+const summ=is=>`${is.complaints.length} report${is.complaints.length>1?"s":""} of a ${is.cat.toLowerCase()} problem at ${locStr(is)}; first reported ${ago(is.first)}. Suggested action: assign to ${TEAM[is.cat]}${is.pri.p==="Critical"?" immediately":""}.`;
+function process(text,ts=Date.now()){
+ const c=analyze(text),m=match(c),steps=[["Intake",`${c.cat} at ${locStr(c)}`]];let is;
+ if(m){is=m.is;is.complaints.push({text,sim:m.s,t:ts});c.toks.forEach(x=>is.toks.add(x));
+  if(is.status==="Resolved"){is.status="New";is.reopened=true}
+  steps.push(["Dedup",`${Math.round(m.s*100)}% similar, merged into ${is.id}`])}
+ else{is={id:"ISS-"+(++seq),cat:c.cat,block:c.block,place:c.place,title:text[0].toUpperCase()+text.slice(1),toks:new Set(c.toks),complaints:[{text,sim:1,t:ts}],status:"New",first:ts,recur:PAST.some(p=>p[0]===c.cat&&p[1]===c.block)};
+  issues.push(is);steps.push(["Dedup","No match, created "+is.id])}
+ is.pri=score(is);
+ steps.push(["RAG",`Recurring: ${is.recur?"yes":"no"}. Team: ${TEAM[is.cat]}`]);
+ steps.push(["Priority",`${is.pri.p} (${is.pri.s}/100)${is.pri.strong?", safety override":""}`]);
+ steps.push(["Summary",summ(is)]);
+ return{is,steps}}
+function showSteps(steps){const my=++run;
+ $("#pl").innerHTML=NODES.map((n,i)=>`<div class="n" id="n${i}"><b>${n}</b><div class="mu"></div></div>`).join("");
+ steps.forEach((s,i)=>setTimeout(()=>{if(my!==run)return;const el=$("#n"+i);el.classList.add("on");el.lastChild.textContent=s[1]},i*280))}
+function show(r){flash=r.is.id;showSteps(r.steps);render();setTimeout(()=>{flash=null},1300)}
+function kpis(){
+ const n=issues.reduce((a,i)=>a+i.complaints.length,0),u=issues.length,r=n?Math.round((1-u/n)*100):0,cr=issues.filter(i=>i.pri.p==="Critical"&&i.status!=="Resolved").length;
+ $("#kpi").innerHTML=[["Complaints",n],["Unique issues",u],["Duplicate reduction",r+"%"],["Critical open",cr]].map(([a,b])=>`<div class="card"><div class="mu">${a}</div><div class="kv">${b}</div></div>`).join("")+
+ `<div class="card" style="grid-column:1/-1"><div class="mu">Raw complaints vs unique issues</div><div class="bb"><div style="width:100%">${n} complaints</div></div><div class="bb"><div class="a" style="width:${n?u/n*100:0}%;min-width:80px">${u} issues</div></div></div>`}
+function card(is){
+ const p=is.pri,n=is.complaints.length,open=OPEN.has(is.id);
+ return `<div class="card${is.id===flash?" flash":""}" style="margin-bottom:12px">
+<div class="row"><span class="b p-${p.p}">${ICON[p.p]} ${p.p}</span><b>${esc(is.title)}</b>${is.reopened?'<span class="tag">Reopened</span>':""}${is.recur?'<span class="tag">Recurring</span>':""}</div>
+<div class="mu">${is.id} · ${is.cat} · ${locStr(is)} · ${TEAM[is.cat]}</div>
+<div class="row"><span class="dots">${"<i></i>".repeat(Math.min(n,24))}</span><b>${n} report${n>1?"s":""} → 1 issue</b>
+<select data-id="${is.id}" aria-label="Status">${ST.map(s=>`<option${s===is.status?" selected":""}>${s}</option>`).join("")}</select>
+<button class="lnk" data-o="${is.id}">${open?"Hide details":"Show details"}</button></div>
+${open?`<p>${summ(is)}</p><div class="mu">Why ${p.p}? Score ${p.s}/100${p.strong?", safety override":""}</div>
+${Object.keys(W).map(k=>`<div class="fr"><span>${LBL[k]}</span><div class="tr"><div style="width:${p.f[k]*100}%"></div></div><span>${Math.round(p.f[k]*W[k]*100)}</span></div>`).join("")}
+<div class="mu" style="margin-top:8px">Grouped complaints with similarity</div>
+${is.complaints.map(c=>`<div class="cm"><span>${esc(c.text)}</span><span class="mu">${Math.round(c.sim*100)}% · ${ago(c.t)}</span></div>`).join("")}`:""}</div>`}
+function render(){
+ kpis();
+ const l=issues.filter(i=>(!fp||i.pri.p===fp)&&(!fs||i.status===fs)).sort((a,b)=>(a.status==="Resolved")-(b.status==="Resolved")||RANK[b.pri.p]*1000+b.pri.s-(RANK[a.pri.p]*1000+a.pri.s));
+ $("#list").innerHTML=l.length?l.map(card).join(""):'<div class="card mu">No issues match these filters. Clear a filter or submit a report.</div>'}
+$("#list").onclick=e=>{const o=e.target.dataset.o;if(o){OPEN.has(o)?OPEN.delete(o):OPEN.add(o);render()}};
+$("#list").onchange=e=>{const i=issues.find(x=>x.id===e.target.dataset.id);if(i){i.status=e.target.value;render()}};
+$("#fp").onchange=e=>{fp=e.target.value;render()};$("#fs").onchange=e=>{fs=e.target.value;render()};
+$("#txt").oninput=e=>{const v=e.target.value.trim();
+ if(!v){$("#chips").innerHTML=$("#hint").innerHTML="";$("#sub").textContent="Submit report";return}
+ const c=analyze(v),m=match(c);
+ $("#chips").innerHTML=`<span class="tag">${c.cat}</span><span class="tag">${locStr(c)}</span>`;
+ $("#hint").innerHTML=m?`<div class="hn"><b>${m.is.complaints.length} others</b> already reported this: ${esc(m.is.title)}</div>`:"";
+ $("#sub").textContent=m?"Add my report":"Submit report"};
+$("#sub").onclick=()=>{const v=$("#txt").value.trim();if(!v)return;const r=process(v);
+ $("#txt").value="";$("#chips").innerHTML="";
+ $("#hint").innerHTML=`<div class="hn">Report received. Tracking ID <b>CP-${1000+Math.floor(Math.random()*9000)}</b>, filed under ${r.is.id}.</div>`;
+ $("#sub").textContent="Submit report";show(r)};
+function start(){clearInterval(iv);iv=setInterval(()=>show(process(TPL[Math.random()*TPL.length|0])),3400-$("#sp").value)}
+$("#sim").onclick=()=>{if(iv){clearInterval(iv);iv=null;$("#sim").textContent="Start simulation"}else{$("#sim").textContent="Stop simulation";start()}};
+$("#sp").oninput=()=>{if(iv)start()};
+$("#th").onclick=()=>{const d=document.documentElement,dark=d.dataset.theme?d.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;d.dataset.theme=dark?"light":"dark"};
+[["Water leaking near B block stairs",30],["water leak in B block staircase, floor is slippery",29],["Pipe leaking B block stairs",27],["Leakage near b block stairs very slippery",22],["B block stairs water leak again",14],["tap water leaking near stairs in B block",9],["Classroom fan not working in C block",26],["fan not working C block classroom",20],["C block class fan stopped working",6],["Dustbin overflowing near canteen",18],["garbage overflowing canteen dustbin",12],["Trash smell near canteen dustbin",5],["Projector not working in A block seminar hall",15],["A block seminar hall projector broken",3],["Wifi not working in hostel",40],["no internet in hostel wifi",25],["hostel wifi not working since morning",10],["hostel wifi slow and disconnecting",2],["Sparks from socket in D block lab",2],["Socket sparking in lab D block",1],["AC not cooling in library",8],["Broken bench in C block classroom",50]].sort((a,b)=>b[1]-a[1]).forEach(([t,h])=>process(t,Date.now()-h*36e5));
+[[/fan/i,"Assigned"],[/projector/i,"In Progress"],[/bench/i,"Resolved"]].forEach(([re,s])=>{const i=issues.find(x=>re.test(x.title));if(i)i.status=s});
+render();showSteps(process("Water leak in B block stairs").steps);render();
+</script></body></html>
